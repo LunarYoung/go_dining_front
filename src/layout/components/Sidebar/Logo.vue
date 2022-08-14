@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'Go Web Mini',
+      title: '食堂管理',
       logo: require('@/assets/sidebar-logo/webmini.png')
     }
   }

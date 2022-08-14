@@ -1,64 +1,29 @@
 <template>
   <div>
     <el-card class="container-card" shadow="always">
-      <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
-        <el-form-item label="菜名">
-          <el-input v-model.trim="params.username" clearable placeholder="菜名" @clear="search" />
-        </el-form-item>
-        <el-form-item label="分类">
-          <el-select v-model.trim="params.status" clearable placeholder="分类" @change="search" @clear="search">
-            <el-option label="1" value="1" />
-            <el-option label="2" value="2" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model.trim="params.status" clearable placeholder="状态" @change="search" @clear="search">
-            <el-option label="正常" value="1" />
-            <el-option label="禁用" value="2" />
-          </el-select>
-        </el-form-item>
 
-        <el-form-item>
-          <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button :loading="loading" icon="el-icon-plus" type="warning" @click="create">新增</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button :loading="loading" icon="el-icon-plus" type="success" @click="create">新增分类</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
-        </el-form-item>
-      </el-form>
+      <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%">
 
-      <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column show-overflow-tooltip sortable prop="name" label="名称" />
-        <el-table-column show-overflow-tooltip sortable prop="introduction" label="图片">
-          <el-avatar shape="square" :size="100" :fit="fit" :src="url" />
-        </el-table-column>
+        <el-table-column show-overflow-tooltip sortable prop="name" label="订单号" />
 
-        <el-table-column show-overflow-tooltip sortable prop="nickname" label="价格" />
-        <el-table-column show-overflow-tooltip sortable prop="status" label="状态" />
-        <el-table-column show-overflow-tooltip sortable prop="status" label="最大可卖" align="center">
+        <el-table-column show-overflow-tooltip sortable prop="nickname" label="内容" />
+        <el-table-column show-overflow-tooltip sortable prop="status" label="备注" />
+        <el-table-column show-overflow-tooltip sortable prop="status" label="地址" align="center">
           <template slot-scope="scope">
             <el-tag size="small" :type="scope.row.status === 1 ? 'success':'danger'" disable-transitions>{{ scope.row.status === 1 ? '正常':'禁用' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip sortable prop="mobile" label="当天销量" />
-        <el-table-column show-overflow-tooltip sortable prop="creator" label="剩余可卖" />
+        <el-table-column show-overflow-tooltip sortable prop="mobile" label="电话" />
+        <el-table-column show-overflow-tooltip sortable prop="creator" label="类型" />
 
         <el-table-column fixed="right" label="操作" align="center" width="120">
           <template slot-scope="scope">
-            <el-tooltip content="编辑" effect="dark" placement="top">
-              <el-button size="mini" icon="el-icon-edit" circle type="primary" @click="update(scope.row)" />
-            </el-tooltip>
-            <el-tooltip class="delete-popover" content="删除" effect="dark" placement="top">
-              <el-popconfirm title="确定删除吗？" @onConfirm="singleDelete(scope.row.ID)">
-                <el-button slot="reference" size="mini" icon="el-icon-delete" circle type="danger" />
-              </el-popconfirm>
-            </el-tooltip>
+
+            <el-button size="small" type="primary" @click="update(scope.row)">暂停</el-button>
+            <el-button size="small" type="info">锁定</el-button>
+
+            <el-button slot="reference" size="small" type="success">完成</el-button>
+
           </template>
         </el-table-column>
       </el-table>

@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Go Web Mini',
+  title: '食堂管理',
 
   /**
    * @type {boolean} true | false
