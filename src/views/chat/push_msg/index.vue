@@ -72,43 +72,12 @@ export default {
     }
   },
   created() {
-    this.getApplets()
+
   },
   methods: {
-    getApplets() {
-      {
-        this.listLoading = true
-        queryApplets().then(response => {
-          this.form = response.data
 
-          setTimeout(() => {
-            this.listLoading = false
-          }, 1 * 1000)
-        })
-      }
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          updateApplets(this.form).then(response => {
-            if (response.code === 200) {
-              this.$notify({
-                title: '保存成功',
-                type: 'success',
-                duration: 2000
-              })
-            }
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    }
   }
+
 }
 </script>
 

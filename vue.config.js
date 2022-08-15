@@ -43,6 +43,13 @@ module.exports = {
         pathRewrite: {
           '^/api': 'api'
         }
+      },
+      '/order': {
+        target: 'http://localhost:8089',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/order': 'order'
+        }
       }
     }
   },

@@ -5,6 +5,7 @@ export function login(data) {
     url: '/api/base/login',
     method: 'post',
     data
+
   })
 }
 
