@@ -17,39 +17,25 @@
       <el-container>
         <el-aside style="height:100%;width: 15%;margin-bottom: -5%">
           <div>
-            <el-input v-model="input3" placeholder="请输入联系人">
+            <el-input  placeholder="请输入联系人">
 
               <el-button slot="append" icon="el-icon-search" />
             </el-input>
           </div>
-          <div>
-            <p style="margin-bottom: -7%">
+          <div v-for="(item, index) in msgDate">
+
+            <p v-if="item.send_from !== org_id" style="margin-bottom: -7%">
               <el-button style="width:100%">
                 <span style="float: left">
-                  <el-avatar :size="35" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                  <el-avatar :size="35" :src=item.avt />
                 </span>
-                <span style="float: left;margin-top: 10px;margin-left: 10px"> 默1认按钮1</span>
+                <span  style="float: left;margin-top: 10px;margin-left: 10px">
+                  {{item.name}}
+                </span>
                 <el-tag style="margin-top: 7px" size="mini">总群</el-tag>
               </el-button>
             </p>
 
-            <p style="margin-bottom: -7%">
-              <el-button style="width:100%">
-                <span style="float: left">
-                  <el-avatar :size="35" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                </span>
-                <span style="float: left;margin-top: 10px;margin-left: 10px"> 默1认按钮1</span>
-              </el-button>
-            </p>
-
-            <p style="margin-bottom: -7%">
-              <el-button style="width:100%">
-                <span style="float: left">
-                  <el-avatar :size="35" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                </span>
-                <span style="float: left;margin-top: 10px;margin-left: 10px"> 默1认按钮1</span>
-              </el-button>
-            </p>
           </div>
         </el-aside>
         <el-container>
@@ -58,26 +44,23 @@
             <el-row :gutter="17">
               <el-col :span="24">
                 <el-card style="height: 600px">
-                  <div style="height: 60px">
-                    <el-avatar style="float: left" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                    <a style="float: left;margin-top: 15px;margin-left: 20px; border-radius: 5px;border: 1px solid #DCDCDC;background-color: #DCDCDC">
-                      第三方就好了
-                    </a>
-                  </div>
 
-                  <div style="height: 60px">
-                    <el-avatar style="float: right" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+              <div  v-for="(item, index) in msgDate">
+
+                  <div v-if="item.send_from === org_id" style="height: 60px">
+                    <el-avatar style="float: right" :src=item.avt />
                     <a style="float: right;margin-top: 15px;margin-right: 20px; border-radius: 5px;border: 1px solid #B0C4DE;background-color: #B0C4DE">
-                      第三方就好水电费sfsd了
+                     {{item.msg}}
+                    </a>
+                  </div>
+                  <div v-else style="height: 60px">
+                    <el-avatar style="float: left" :src=item.avt />
+                    <a style="float: left;margin-top: 15px;margin-left: 20px; border-radius: 5px;border: 1px solid #DCDCDC;background-color: #DCDCDC">
+                      {{item.msg}}
                     </a>
                   </div>
 
-                  <div style="height: 60px">
-                    <el-avatar style="float: left" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                    <a style="float: left;margin-top: 15px;margin-left: 20px; border-radius: 5px;border: 1px solid #DCDCDC;background-color: #DCDCDC">
-                      第三方就好水电费sfsd了
-                    </a>
-                  </div>
+              </div>
                 </el-card>
               </el-col>
             </el-row>
@@ -104,25 +87,55 @@
 
 <script>
 
-import WebSocketClass from '../../../utils/webSocketClass.js'
+import { sendData, closewebsocket, initWebSocket }  from '../../../utils/ws.js'
+
 
 export default {
   name: 'Index',
   data() {
     return {
-      content: ''
+      content: '',
+      org_id:'1234',
+      msgDate:[
+        {
+          name:"zeng",
+          avt:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+          send_from:"1",
+          send_to:"1234",
+          msg:"sfjksds1111111111111111dhf"
+        },
+        {
+          name:"gao",
+          avt:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+          send_from:"1234",
+          send_to:"1",
+          msg:"sfjksdsdfsfhf"
+        },
+        {
+          name:"gao",
+          avt:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+          send_from:"1",
+          send_to:"1234",
+          msg:"sfjks对方是否dhf"
+        },
+      ]
     }
   },
   created() {
-    console.log('ddd')
-    this.WsConnect()
+    initWebSocket();
+    this.send();
   },
   methods: {
-    WsConnect() {
-      const ws = new WebSocketClass()
-      ws.connect()
-      ws.getMessage()
-    }
+    test(e) {
+      console.log(e.data);
+      this.data = JSON.parse(e.data);
+    },
+    // 发送数据
+    send() {
+      sendData("request jammer", this.test);
+
+    },
+
   }
 
 }
